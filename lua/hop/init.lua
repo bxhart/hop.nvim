@@ -17,7 +17,7 @@ local function check_opts(opts)
     return
   end
 
-  if vim.version.cmp({ 0, 10, 0 }, vim.version()) < 0 then
+  if vim.version.cmp({ 0, 10, 0 }, vim.version()) > 0 then
     local hint = require('hop.hint')
     opts.hint_type = hint.HintType.OVERLAY
   end
@@ -30,6 +30,13 @@ local function check_opts(opts)
   local mode = api.nvim_get_mode().mode
   if mode ~= 'n' and mode ~= 'nt' then
     opts.multi_windows = false
+  end
+
+	local caller = debug.getinfo(3).name
+	if caller ~= 'hint_lines' and caller ~= 'hint_lines_skip_whitespace' then
+    if opts.hint_type == 'right_align' then
+      vim.notify('Cannot use right_align with this action (' .. caller .. ')', vim.log.levels.WARN)
+    end
   end
 end
 
