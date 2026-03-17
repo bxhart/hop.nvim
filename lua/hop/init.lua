@@ -32,8 +32,8 @@ local function check_opts(opts)
     opts.multi_windows = false
   end
 
-	local caller = debug.getinfo(3).name
-	if caller ~= 'hint_lines' and caller ~= 'hint_lines_skip_whitespace' then
+  local caller = debug.getinfo(3).name
+  if caller ~= 'hint_lines' and caller ~= 'hint_lines_skip_whitespace' then
     if opts.hint_type == 'right_align' then
       vim.notify('Cannot use right_align with this action (' .. caller .. ')', vim.log.levels.WARN)
     end
@@ -368,6 +368,11 @@ function M.refine_hints(key, hint_state, callback, opts)
     M.quit(hint_state)
 
     callback(h.jump_target)
+
+    if opts.callback and type(opts.callback) == 'function' then
+      opts.callback()
+    end
+
     return h
   end
 end
