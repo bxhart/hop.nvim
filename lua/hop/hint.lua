@@ -34,7 +34,7 @@ M.HintPosition = {
 M.HintType = {
   OVERLAY = 'overlay',
   INLINE = 'inline',
-  RIGHT_ALIGN = 'right_align'
+  RIGHT_ALIGN = 'right_align',
 }
 
 ---@enum HintPriority
@@ -64,7 +64,7 @@ end
 ---@param a CursorPos Cursor Position
 ---@param b CursorPos Jump target position
 ---@param x_bias number
----@return number 
+---@return number
 function M.readwise_distance(a, b, x_bias)
   return (100 * math.abs(b.row - a.row)) + (b.col - a.col)
 end
@@ -201,6 +201,8 @@ function M.set_hint_extmarks(hl_ns, hints, opts)
 
     local row, col = window.pos2extmark(hint.jump_target.cursor)
     api.nvim_buf_set_extmark(hint.jump_target.buffer, hl_ns, row, col, {
+      strict = opts.strict,
+      virt_text_win_col = opts.virtcol and col or nil,
       virt_text = virt_text,
       virt_text_pos = opts.hint_type,
       hl_mode = opts.hl_mode,
